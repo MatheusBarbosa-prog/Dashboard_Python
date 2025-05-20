@@ -2,6 +2,8 @@
 import pandas as pd
 import numpy as np
 from datetime import datetime
+from geopy.geocoders import Nominatim
+from time import sleep
 
 # Semente para resultados consistentes
 np.random.seed(10)
@@ -19,17 +21,34 @@ dimen_produto = pd.DataFrame({
 dimen_produto.to_csv("dimen_produto.csv", index=False)
 
 # Clientes
-nomes_clientes = ['Ana', 'Arthur', 'Chico', 'Matheus', 'Luan']
+nomes_clientes = ['Empresa 1', 'Empresa 2', 'Empresa 3', 'Empresa 4', 'Empresa 5']
+cidades = ['Recife', 'Parnamirim', 'Coxixola', 'João Pessoa', 'Caruaru']
+estados = ['PE', 'RN', 'PB', 'PB', 'PE']
+
 dimen_clientes = pd.DataFrame({
     'id_cliente': range(1, len(nomes_clientes) + 1),
     'nome_cliente': nomes_clientes,
-    'cidade': np.random.choice(['Recife', 'João Pessoa', 'Coxixola', 'Parnamirim', 'Petrolina'], size=len(nomes_clientes)),
-    'estado': np.random.choice(['PE', 'PB', 'PB', 'RN', 'PE'])
+    'cidade': cidades,
+    'estado': estados
 })
+
+#Adicionando a latitude e longitude
+geolocator = Nominatim(user_agent="geoapi")
+
+def geocode(row):
+    try:
+        location = geolocator.geocode(f"{row['cidade']}, {row['estado']}, Brasil")
+        sleep(1) #Evita bloqueio na aplicação por excesso de requisição, isso acontece quando utiliza o Nominatim
+        if location:
+            return pd.Series([location.latitude, location.longitude])
+    except:
+        return pd.Series([None, None])
+    
+dimen_clientes[['latitude', 'longitude']] = dimen_clientes.apply(geocode, axis=1)
 dimen_clientes.to_csv("dimen_clientes.csv", index=False)
 
 # Vendedores
-vendedores = ['João', 'Carlos', 'Ana', 'Pedro', 'Lucas']
+vendedores = ['Marcia', 'Arthur', 'Chico', 'Matheus', 'Luan']
 dimen_vendedor = pd.DataFrame({
     'id_vendedor': range(1, len(vendedores) + 1),
     'nome_vendedor': vendedores,

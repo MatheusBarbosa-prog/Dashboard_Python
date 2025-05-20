@@ -1,6 +1,6 @@
-id_cliente,nome_cliente,cidade,estado
-1,Ana,Recife,PE
-2,Arthur,Coxixola,PE
-3,Chico,Recife,PE
-4,Matheus,Petrolina,PE
-5,Luan,Parnamirim,PE
+id_cliente,nome_cliente,cidade,estado,latitude,longitude
+1,Empresa 1,Recife,PE,-8.0584933,-34.8848193
+2,Empresa 2,Parnamirim,RN,-5.9153334,-35.2679913
+3,Empresa 3,Coxixola,PB,-7.6272915,-36.606013
+4,Empresa 4,João Pessoa,PB,-7.1215981,-34.882028
+5,Empresa 5,Caruaru,PE,-8.2829702,-35.9722852
